@@ -1,53 +1,41 @@
-// index.js
-document.addEventListener('DOMContentLoaded', (event) => {
-    const mapDiv = document.getElementById('map');
-    const mapImage = document.getElementById('map-image');
+// Wait until the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+    // Get all markers
+    const markers = document.querySelectorAll(".map-div img");
 
-    let offsetX = 0, offsetY = 0;
-    let scale = 1;
-    const panSpeed = 50; // Adjust the pan speed as needed
-    const edgeBuffer = 100; // Distance from the edge to start panning
+    // Iterate over each marker
+    markers.forEach(marker => {
+        // Add a click event listener to each marker
+        marker.addEventListener("click", function() {
+            // Create a new blank div
+            const blankDiv = document.createElement("div");
+            blankDiv.classList.add("blank-div");
 
-    function adjustPosition(cursorX, cursorY) {
-        const rect = mapDiv.getBoundingClientRect();
-        const imageRect = mapImage.getBoundingClientRect();
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
+            // Style the blank div (optional, you can move this to CSS)
+            blankDiv.style.position = "absolute";
+            blankDiv.style.width = "200px";
+            blankDiv.style.height = "100px";
+            blankDiv.style.backgroundColor = "white";
+            blankDiv.style.border = "1px solid black";
+            blankDiv.style.top = "50%";
+            blankDiv.style.left = "50%";
+            blankDiv.style.transform = "translate(-50%, -50%)";
 
-        // Check if the cursor is within the edge buffer from the viewport edges
-        if (cursorX < edgeBuffer) {
-            offsetX += panSpeed / scale; // Move right
-        } else if (cursorX > windowWidth - edgeBuffer) {
-            offsetX -= panSpeed / scale; // Move left
-        }
+            // Append the blank div to the map div
+            document.getElementById("map").appendChild(blankDiv);
 
-        if (cursorY < edgeBuffer) {
-            offsetY += panSpeed / scale; // Move down
-        } else if (cursorY > windowHeight - edgeBuffer) {
-            offsetY -= panSpeed / scale; // Move up
-        }
+            // Optional: Add a close button to the blank div
+            const closeButton = document.createElement("button");
+            closeButton.innerHTML = "Close";
+            closeButton.style.position = "absolute";
+            closeButton.style.top = "5px";
+            closeButton.style.right = "5px";
+            blankDiv.appendChild(closeButton);
 
-        // Ensure the image does not move outside of the container bounds
-        offsetX = Math.max(Math.min(offsetX, 0), -(imageRect.width * scale - rect.width));
-        offsetY = Math.max(Math.min(offsetY, 0), -(imageRect.height * scale - rect.height));
-
-        mapImage.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-    }
-
-    function handleMouseMove(e) {
-        const cursorX = e.clientX;
-        const cursorY = e.clientY;
-        adjustPosition(cursorX, cursorY);
-    }
-
-    function handleWheel(e) {
-        e.preventDefault();
-        scale += e.deltaY * -0.001;
-        scale = Math.min(Math.max(0.5, scale), 3);
-        mapImage.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-        adjustPosition(event.clientX, event.clientY); // Recalculate position after zooming
-    }
-
-    window.addEventListener('mousemove', handleMouseMove);
-    mapDiv.addEventListener('wheel', handleWheel);
+            // Add event listener to close button to remove the blank div
+            closeButton.addEventListener("click", function() {
+                blankDiv.remove();
+            });
+        });
+    });
 });
