@@ -55,6 +55,7 @@ body, html {
 .content-div {
     margin-top: 5px;
     overflow-y: scroll;
+    overflow-x: hidden;
     width: 100%;
     height: 95%;
     border: 1px solid black;
@@ -86,6 +87,19 @@ body, html {
     color: white; /* Text color when hovered (optional) */
 }
 
+.picture-portrait {
+    border: 1px solid black;
+    height: 400px;
+    width: 95%;
+    margin: 10px;
+}
+
+.picture-landscape {
+    border: 1px solid black;
+    height: 150px;
+    width: 95%;
+    margin: 10px;
+}
 
 .map-div {
     margin-top: 100px;
